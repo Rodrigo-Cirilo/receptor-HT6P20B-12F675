@@ -1,0 +1,17 @@
+[PROJECT]
+Target=receptor-12f675-ht6p20b.hex
+Processor_Text=PIC12F675
+CCSVersion=5.049
+Compiler=PCM
+[Target Data]
+FileList=receptor-12f675-ht6p20b.c
+[receptor-12f675-ht6p20b.c]
+Type=4
+[mru-list]
+1=receptor-12f675-ht6p20b.c
+[Units]
+Count=1
+1=receptor-12f675-ht6p20b (main)
+
+[defines]
+buildcount=1

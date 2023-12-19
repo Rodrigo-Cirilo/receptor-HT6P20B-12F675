@@ -1,0 +1,52 @@
+
+ROM used:   465/1024 (45%)
+            1024/1024 (100%) including unused fragments
+
+            0.6 Average locations per line
+            4.4 Average locations per statement
+
+RAM used:   16/64 (25%) at main() level
+            21/64 (33%) worst case
+
+Stack used: 0 worst case (0 in main + 0 for interrupts)
+Stack size: 8
+
+Lines Stmts  %   Files
+----- ----- ---  -----
+  260   105 100  receptor-12f675-ht6p20b.c
+  501     0   0  ..\..\..\..\..\Program Files (x86)\PICC\Devices\12F675.h
+----- -----
+  761   105 Total
+
+Page ROM  %  RAM    Vol Diff  Functions:
+---- --- --- ---    --- ----  ----------
+0     20   4    1             @delay_ms1
+ Inline         2    607  8.1  get_htp
+ Inline         3    367  6.1  procura
+ Inline         2    287  5.5  end_gravar
+ Inline         3    338  4.7  gravar
+ Inline         3    590  6.3  action
+0    361  78    0    202  3.6  recebe_tx
+0     73  16    0    367  3.3  MAIN
+ Inline         0             @cinit1
+
+Program metrics:
+    Functions               7
+    Statements              105
+    Comments                158
+    Volume (V)              4154
+    Difficulty (D)          37.2
+    Effort to implement (E) 154620
+    Time to implement (T)   2 hours, 23 minutes
+    Est Delivered Bugs (B)  1
+    Cyclomatic Complexity   24
+    Maintainability (MI)    137
+
+ Segment     Used  Free
+-----------  ----  ----
+00000-00003     4  0  
+00004-003FE   460  559  
+003FF-003FF     1  0  
+
+
+

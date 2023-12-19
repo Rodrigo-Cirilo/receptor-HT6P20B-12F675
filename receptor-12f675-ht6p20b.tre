@@ -1,0 +1,12 @@
+ÀÄreceptor-12f675-ht6p20b
+   ÀÄMAIN  0/73  Ram=0
+      ÃÄ@cinit1  (Inline)  Ram=0
+      ÃÄ@delay_ms1  0/20  Ram=1
+      ÀÄrecebe_tx  0/361  Ram=0
+         ÃÄget_htp  (Inline)  Ram=2
+         ÀÄaction  (Inline)  Ram=3
+            ÃÄprocura  (Inline)  Ram=3
+            ÃÄ@delay_ms1  0/20  Ram=1
+            ÃÄgravar  (Inline)  Ram=3
+            ³  ÀÄend_gravar  (Inline)  Ram=2
+            ÀÄ@delay_ms1  0/20  Ram=1

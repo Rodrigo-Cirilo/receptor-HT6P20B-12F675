@@ -1,0 +1,78 @@
+004-005 @READ_PROGRAM_MEMORY8.P1
+005     gpio
+005.3   RF
+019.6   C1OUT
+020     @SCRATCH
+021     @SCRATCH
+021     _RETURN_
+022     @SCRATCH
+023     @SCRATCH
+024.0   LEDG
+024.1   recebe_tx.fr
+025-028 buffer
+029-02C bufferx
+02D-02E timerx
+02F     a
+030     action.aux
+030     get_htp.x
+031     action.i
+031     get_htp.@SCRATCH1
+032     gravar.adr
+032     procura.a
+032     action.@SCRATCH1
+033     @delay_ms1.P1
+033     end_gravar.a
+033     procura.@SCRATCH1
+033     gravar.@SCRATCH1
+034     procura.@SCRATCH2
+034     end_gravar.@SCRATCH1
+034     gravar.@SCRATCH2
+09B-09C @READ_PROGRAM_MEMORY8.P1
+
+ROM Allocation:
+00000A  @delay_ms1
+00001E  get_htp
+00001E  recebe_tx
+000090  procura
+000090  action
+0000E5  end_gravar
+0000E5  gravar
+000187  @cinit1
+000187  MAIN
+0001A8  @cinit2
+
+Project Directory:
+    C:\Users\Rodrigo\Documents\receptor-12f675\receptor-HT6P20B-12F675\
+
+Project Files:
+    receptor-12f675-ht6p20b.c                               [19-dez-23 20:50  CRC=A138447B]
+    ..\..\..\..\..\Program Files (x86)\PICC\Devices\12F675.h [08-set-15 15:14  CRC=FF0B0280]
+
+Source signature=9F4E497B
+Program memory checksum=B03A
+Program memory CRC=0562
+Hex file CRC=546B
+
+Units:
+    receptor-12f675-ht6p20b (main)
+
+Compiler Settings:
+    Processor:      PIC12F675
+    Pointer Size:   8
+    ADC Range:      0-255
+    Opt Level:      9
+    Short,Int,Long: UNSIGNED: 1,8,16
+    Float,Double:   32,32
+    Compile Mode:       CCS5
+
+Output Files:
+    XREF file:   receptor-12f675-ht6p20b.xsym
+    Errors:      receptor-12f675-ht6p20b.err
+    Ext Symbols: receptor-12f675-ht6p20b.esym
+    INHX8:       receptor-12f675-ht6p20b.hex
+    Symbols:     receptor-12f675-ht6p20b.sym
+    List:        receptor-12f675-ht6p20b.lst
+    Debug/COFF:  receptor-12f675-ht6p20b.cof
+    Project:     receptor-12f675-ht6p20b.ccspjt
+    Call Tree:   receptor-12f675-ht6p20b.tre
+    Statistics:  receptor-12f675-ht6p20b.STA

@@ -1,0 +1,761 @@
+CCS PCM C Compiler, Version 5.049, 5967               19-dez-23 20:50
+
+               Filename:   C:\Users\Rodrigo\Documents\receptor-12f675\receptor-HT6P20B-12F675\receptor-12f675-ht6p20b.lst
+
+               ROM used:   465 words (45%)
+                           Largest free fragment is 559
+               RAM used:   16 (25%) at main() level
+                           21 (33%) worst case
+               Stack used: 0 locations
+               Stack size: 8
+
+*
+0000:  MOVLW  01
+0001:  MOVWF  0A
+0002:  GOTO   004
+0003:  NOP
+0004:  CALL   3FF
+0005:  BSF    03.5
+0006:  MOVWF  10
+0007:  MOVLW  00
+0008:  MOVWF  0A
+0009:  GOTO   187
+.................... #include<12F675.h> 
+.................... //////////// Standard Header file for the PIC12F675 device //////////////// 
+.................... /////////////////////////////////////////////////////////////////////////// 
+.................... ////        (C) Copyright 1996, 2014 Custom Computer Services          //// 
+.................... //// This source code may only be used by licensed users of the CCS C  //// 
+.................... //// compiler.  This source code may only be distributed to other      //// 
+.................... //// licensed users of the CCS C compiler.  No other use, reproduction //// 
+.................... //// or distribution is permitted without written permission.          //// 
+.................... //// Derivative programs created using this software in object code    //// 
+.................... //// form are not restricted in any way.                               //// 
+.................... /////////////////////////////////////////////////////////////////////////// 
+.................... #device PIC12F675 
+....................  
+.................... #list 
+....................  
+.................... //#device adc=8 
+....................  
+.................... #FUSES NOWDT                    //No Watch Dog Timer 
+.................... #FUSES INTRC_IO                 //Internal RC Osc, no CLKOUT 
+.................... #FUSES NOCPD                    //No EE protection 
+.................... #FUSES PROTECT                  //Code protected from reads 
+.................... #FUSES NOMCLR                   //Master Clear pin used for I/O 
+.................... #FUSES PUT                      //Power Up Timer 
+.................... #FUSES NOBROWNOUT               //No brownout reset 
+....................  
+.................... #use delay(clock=4000000) 
+000A:  MOVLW  33
+000B:  MOVWF  04
+000C:  MOVF   00,W
+000D:  BTFSC  03.2
+000E:  GOTO   01D
+000F:  MOVLW  01
+0010:  MOVWF  21
+0011:  CLRF   20
+0012:  DECFSZ 20,F
+0013:  GOTO   012
+0014:  DECFSZ 21,F
+0015:  GOTO   011
+0016:  MOVLW  4A
+0017:  MOVWF  20
+0018:  DECFSZ 20,F
+0019:  GOTO   018
+001A:  GOTO   01B
+001B:  DECFSZ 00,F
+001C:  GOTO   00F
+001D:  RETURN
+....................  
+.................... //#ignore_warnings 203,202  //desconsidera mensagem de 'condition always true' 
+....................  
+.................... #ZERO_RAM 
+.................... #use fast_io(a) 
+.................... #byte gpio=0x05 
+.................... //#bit LEDG=0x05.4//pino A4 led  
+.................... #bit RF  =0x05.3//entrada do sinal de RF pino 4 
+.................... #define NBIT 28 // numero de bits 
+.................... #define T_basico 500 //tempo basico (pulso inicial da transmissão)  
+.................... #define t_intervalo 400 // intervalo entre transmissões (400 a 5000)  
+.................... #ROM  0X3FF = {0X3460} 
+....................  
+.................... #define liga PIN_A5 
+.................... #define botao PIN_A0 
+....................  
+.................... int1 LEDG; 
+.................... int32 buffer=0; //buffer de dados a receber 
+.................... int32 bufferx=0;//buffer de copia da transmissão anterior 
+.................... int16 timerx=0; 
+.................... void testa_lrn(); //prototipo 
+....................   int a=0; 
+....................  
+.................... //============================================================================== 
+.................... //          Rotina para captura de bits enviados pelo tx (ht6p20b) 
+.................... //============================================================================== 
+....................  
+.................... int1 get_htp(void)  
+001E:  CLRF   30
+....................  { 
+....................      
+....................    int8  x=0; 
+....................    buffer=0; 
+001F:  CLRF   28
+0020:  CLRF   27
+0021:  CLRF   26
+0022:  CLRF   25
+....................    while(!RF) 
+0023:  BTFSC  05.3
+0024:  GOTO   030
+....................    { 
+....................   
+....................      if(!++timerx)  
+0025:  INCF   2D,F
+0026:  BTFSC  03.2
+0027:  INCF   2E,F
+0028:  MOVF   2D,W
+0029:  IORWF  2E,W
+002A:  BTFSS  03.2
+002B:  GOTO   02F
+....................         return false; 
+002C:  MOVLW  00
+002D:  MOVWF  21
+002E:  GOTO   070
+002F:  GOTO   023
+....................    } 
+....................  
+....................   if(timerx>t_intervalo)//  intervalo entre transmissões (23te x pulso basico) 
+0030:  MOVF   2E,W
+0031:  SUBLW  00
+0032:  BTFSC  03.0
+0033:  GOTO   06E
+0034:  XORLW  FF
+0035:  BTFSS  03.2
+0036:  GOTO   03B
+0037:  MOVF   2D,W
+0038:  SUBLW  90
+0039:  BTFSC  03.0
+003A:  GOTO   06E
+....................     {  
+....................  
+....................       for(x=0;x<NBIT-1;x++) 
+003B:  CLRF   30
+003C:  MOVF   30,W
+003D:  SUBLW  1A
+003E:  BTFSS  03.0
+003F:  GOTO   06A
+....................         { 
+....................          while(RF)  
+0040:  BTFSC  05.3
+....................          { 
+0041:  GOTO   040
+....................           
+....................          } 
+....................          delay_us(T_basico/2);//meio t_basico 
+0042:  MOVLW  53
+0043:  MOVWF  20
+0044:  DECFSZ 20,F
+0045:  GOTO   044
+....................  
+....................          if(RF){ 
+0046:  BTFSS  05.3
+0047:  GOTO   04B
+....................          return FALSE; 
+0048:  MOVLW  00
+0049:  MOVWF  21
+004A:  GOTO   070
+....................          } 
+....................  
+....................          delay_us(T_basico); 
+004B:  MOVLW  A6
+004C:  MOVWF  20
+004D:  DECFSZ 20,F
+004E:  GOTO   04D
+004F:  NOP
+....................  
+....................          if(!RF) { 
+0050:  BTFSC  05.3
+0051:  GOTO   059
+....................          buffer|=0x08000000; 
+0052:  BSF    28.3
+....................          buffer>>=1; 
+0053:  BCF    03.0
+0054:  RRF    28,F
+0055:  RRF    27,F
+0056:  RRF    26,F
+0057:  RRF    25,F
+....................          } 
+0058:  GOTO   05E
+....................          else buffer>>=1; 
+0059:  BCF    03.0
+005A:  RRF    28,F
+005B:  RRF    27,F
+005C:  RRF    26,F
+005D:  RRF    25,F
+....................  
+....................          delay_us(T_basico); 
+005E:  MOVLW  A6
+005F:  MOVWF  20
+0060:  DECFSZ 20,F
+0061:  GOTO   060
+0062:  NOP
+....................  
+....................          if(!RF){  return FALSE; } 
+0063:  BTFSC  05.3
+0064:  GOTO   068
+0065:  MOVLW  00
+0066:  MOVWF  21
+0067:  GOTO   070
+0068:  INCF   30,F
+0069:  GOTO   03C
+....................       } 
+....................  
+....................       return TRUE; 
+006A:  MOVLW  01
+006B:  MOVWF  21
+006C:  GOTO   070
+....................    } 
+006D:  GOTO   070
+....................  
+....................    else return FALSE; 
+006E:  MOVLW  00
+006F:  MOVWF  21
+.................... } 
+....................  
+....................  
+.................... //============================================================================== 
+.................... //          Rotina de pesquisa por controle gravado na eeprom 
+.................... //============================================================================== 
+.................... int1 procura() 
+.................... { 
+....................  
+....................   int8 a; 
+....................   for(a=0;a<126;a+=3){ 
+*
+0090:  CLRF   32
+0091:  MOVF   32,W
+0092:  SUBLW  7D
+0093:  BTFSS  03.0
+0094:  GOTO   0C5
+....................     if(make8(buffer,2)!=read_eeprom(a)) continue ;//achou o primeiro byte? 
+0095:  MOVF   27,W
+0096:  MOVWF  33
+0097:  MOVF   32,W
+0098:  BSF    03.5
+0099:  MOVWF  1B
+009A:  BCF    1C.7
+009B:  BSF    1C.0
+009C:  MOVF   1A,W
+009D:  BCF    03.5
+009E:  SUBWF  33,W
+009F:  BTFSS  03.2
+00A0:  GOTO   0C2
+....................     if(make8(buffer,1)!=read_eeprom(a+1))continue ;//achou o segundo byte? 
+00A1:  MOVF   26,W
+00A2:  MOVWF  33
+00A3:  MOVLW  01
+00A4:  ADDWF  32,W
+00A5:  MOVWF  34
+00A6:  MOVF   34,W
+00A7:  BSF    03.5
+00A8:  MOVWF  1B
+00A9:  BCF    1C.7
+00AA:  BSF    1C.0
+00AB:  MOVF   1A,W
+00AC:  BCF    03.5
+00AD:  SUBWF  33,W
+00AE:  BTFSS  03.2
+00AF:  GOTO   0C2
+....................     if(make8(buffer,0)!=read_eeprom(a+2))continue ;//achou o terceiro byte? 
+00B0:  MOVF   25,W
+00B1:  MOVWF  33
+00B2:  MOVLW  02
+00B3:  ADDWF  32,W
+00B4:  MOVWF  34
+00B5:  MOVF   34,W
+00B6:  BSF    03.5
+00B7:  MOVWF  1B
+00B8:  BCF    1C.7
+00B9:  BSF    1C.0
+00BA:  MOVF   1A,W
+00BB:  BCF    03.5
+00BC:  SUBWF  33,W
+00BD:  BTFSS  03.2
+00BE:  GOTO   0C2
+....................     return true;//sim! Os tres! 
+00BF:  MOVLW  01
+00C0:  MOVWF  21
+00C1:  GOTO   0C7
+00C2:  MOVLW  03
+00C3:  ADDWF  32,F
+00C4:  GOTO   091
+....................   } 
+....................   return false;//não! 
+00C5:  MOVLW  00
+00C6:  MOVWF  21
+.................... } 
+....................  
+.................... //============================================================================== 
+.................... //    Rotina para obter o endereço que deve ser gravado o novo controle 
+.................... //============================================================================== 
+....................  
+.................... int8 end_gravar(){ 
+....................   int8 a; 
+....................  
+....................    for(a=0;a<126;a+=3){ 
+*
+00E5:  CLRF   33
+00E6:  MOVF   33,W
+00E7:  SUBLW  7D
+00E8:  BTFSS  03.0
+00E9:  GOTO   116
+....................     if(read_eeprom(a)!=0xff) continue ;//byte livre? 
+00EA:  MOVF   33,W
+00EB:  BSF    03.5
+00EC:  MOVWF  1B
+00ED:  BCF    1C.7
+00EE:  BSF    1C.0
+00EF:  MOVF   1A,W
+00F0:  SUBLW  FF
+00F1:  BTFSS  03.2
+00F2:  GOTO   112
+....................     if(read_eeprom(a+1)!=0xff) continue ;//byte livre? 
+00F3:  MOVLW  01
+00F4:  BCF    03.5
+00F5:  ADDWF  33,W
+00F6:  MOVWF  34
+00F7:  MOVF   34,W
+00F8:  BSF    03.5
+00F9:  MOVWF  1B
+00FA:  BCF    1C.7
+00FB:  BSF    1C.0
+00FC:  MOVF   1A,W
+00FD:  SUBLW  FF
+00FE:  BTFSS  03.2
+00FF:  GOTO   112
+....................     if(read_eeprom(a+2)!=0xff) continue ;//byte livre? 
+0100:  MOVLW  02
+0101:  BCF    03.5
+0102:  ADDWF  33,W
+0103:  MOVWF  34
+0104:  MOVF   34,W
+0105:  BSF    03.5
+0106:  MOVWF  1B
+0107:  BCF    1C.7
+0108:  BSF    1C.0
+0109:  MOVF   1A,W
+010A:  SUBLW  FF
+010B:  BTFSS  03.2
+010C:  GOTO   112
+....................     return a;//retorna o endereço inicial de 3 bytes livres 
+010D:  BCF    03.5
+010E:  MOVF   33,W
+010F:  MOVWF  21
+0110:  GOTO   118
+0111:  BSF    03.5
+0112:  MOVLW  03
+0113:  BCF    03.5
+0114:  ADDWF  33,F
+0115:  GOTO   0E6
+....................    } 
+....................    return 0xff;//memória cheia 
+0116:  MOVLW  FF
+0117:  MOVWF  21
+.................... } 
+....................  
+.................... //============================================================================== 
+.................... //    Rotina de gravação na EEprom do novo controle 
+.................... //============================================================================== 
+....................  
+....................  
+.................... int8 gravar() 
+.................... { 
+....................  
+....................   int8 adr; 
+....................   adr=end_gravar(); 
+0118:  MOVF   21,W
+0119:  MOVWF  32
+....................   if(!(adr+1)){return 0xff;}//não grava pois memória está cheia 
+011A:  MOVLW  01
+011B:  ADDWF  32,W
+011C:  BTFSS  03.2
+011D:  GOTO   122
+011E:  MOVLW  FF
+011F:  MOVWF  21
+0120:  GOTO   176
+0121:  GOTO   176
+....................   else{ 
+....................   write_eeprom(adr,make8(buffer,2));//grava o primeiro byte 
+0122:  MOVF   27,W
+0123:  MOVWF  33
+0124:  MOVF   0B,W
+0125:  MOVWF  20
+0126:  BCF    0B.7
+0127:  MOVF   32,W
+0128:  BSF    03.5
+0129:  MOVWF  1B
+012A:  BCF    03.5
+012B:  MOVF   27,W
+012C:  BSF    03.5
+012D:  MOVWF  1A
+012E:  BCF    1C.7
+012F:  BSF    1C.2
+0130:  MOVLW  55
+0131:  MOVWF  1D
+0132:  MOVLW  AA
+0133:  MOVWF  1D
+0134:  BSF    1C.1
+0135:  BTFSC  1C.1
+0136:  GOTO   135
+0137:  BCF    1C.2
+0138:  BCF    03.5
+0139:  MOVF   20,W
+013A:  IORWF  0B,F
+....................   write_eeprom(adr+1,make8(buffer,1));//grava o segundo byte 
+013B:  MOVLW  01
+013C:  ADDWF  32,W
+013D:  MOVWF  33
+013E:  MOVF   26,W
+013F:  MOVWF  34
+0140:  MOVF   0B,W
+0141:  MOVWF  20
+0142:  BCF    0B.7
+0143:  MOVF   33,W
+0144:  BSF    03.5
+0145:  MOVWF  1B
+0146:  BCF    03.5
+0147:  MOVF   26,W
+0148:  BSF    03.5
+0149:  MOVWF  1A
+014A:  BCF    1C.7
+014B:  BSF    1C.2
+014C:  MOVLW  55
+014D:  MOVWF  1D
+014E:  MOVLW  AA
+014F:  MOVWF  1D
+0150:  BSF    1C.1
+0151:  BTFSC  1C.1
+0152:  GOTO   151
+0153:  BCF    1C.2
+0154:  BCF    03.5
+0155:  MOVF   20,W
+0156:  IORWF  0B,F
+....................   write_eeprom(adr+2,make8(buffer,0));//grava o terceiro byte 
+0157:  MOVLW  02
+0158:  ADDWF  32,W
+0159:  MOVWF  33
+015A:  MOVF   25,W
+015B:  MOVWF  34
+015C:  MOVF   0B,W
+015D:  MOVWF  20
+015E:  BCF    0B.7
+015F:  MOVF   33,W
+0160:  BSF    03.5
+0161:  MOVWF  1B
+0162:  BCF    03.5
+0163:  MOVF   25,W
+0164:  BSF    03.5
+0165:  MOVWF  1A
+0166:  BCF    1C.7
+0167:  BSF    1C.2
+0168:  MOVLW  55
+0169:  MOVWF  1D
+016A:  MOVLW  AA
+016B:  MOVWF  1D
+016C:  BSF    1C.1
+016D:  BTFSC  1C.1
+016E:  GOTO   16D
+016F:  BCF    1C.2
+0170:  BCF    03.5
+0171:  MOVF   20,W
+0172:  IORWF  0B,F
+....................   disable_interrupts(INT_TIMER0); 
+0173:  BCF    0B.5
+....................   return 0x00;//ok 
+0174:  MOVLW  00
+0175:  MOVWF  21
+....................   } 
+....................    
+.................... } 
+....................  
+.................... //============================================================================== 
+.................... //          Rotina de tratamento do tx recebido 
+.................... //============================================================================== 
+....................  
+.................... void action() 
+....................  { 
+....................   
+....................   if(procura()) //se tx foi encontrado na eeprom vai acionar as saídas 
+*
+00C7:  MOVF   21,F
+00C8:  BTFSC  03.2
+00C9:  GOTO   0E3
+....................   { 
+....................    int8 aux; 
+....................    
+....................    aux= make8(buffer,2); 
+00CA:  MOVF   27,W
+00CB:  MOVWF  30
+....................     
+....................     if((bit_test(aux,7))&&(bit_test(aux,6))||(bit_test(aux,7))||(bit_test(aux,6))) 
+00CC:  BTFSS  30.7
+00CD:  GOTO   0D0
+00CE:  BTFSC  30.6
+00CF:  GOTO   0D4
+00D0:  BTFSC  30.7
+00D1:  GOTO   0D4
+00D2:  BTFSS  30.6
+00D3:  GOTO   0E1
+....................     { 
+....................            
+....................         for(int i = 0; i < 30; i++){ 
+00D4:  CLRF   31
+00D5:  MOVF   31,W
+00D6:  SUBLW  1D
+00D7:  BTFSS  03.0
+00D8:  GOTO   0E0
+....................           output_toggle(liga);    
+00D9:  MOVLW  20
+00DA:  XORWF  05,F
+....................             delay_ms(50); 
+00DB:  MOVLW  32
+00DC:  MOVWF  33
+00DD:  CALL   00A
+00DE:  INCF   31,F
+00DF:  GOTO   0D5
+....................         } 
+....................          output_low(liga);    
+00E0:  BCF    05.5
+....................     } 
+....................    
+....................     LEDG=0; 
+00E1:  BCF    24.0
+....................  } 
+00E2:  GOTO   182
+....................     
+....................   else{ 
+....................    
+....................    if(LEDG) 
+00E3:  BTFSS  24.0
+00E4:  GOTO   182
+....................    { 
+....................       if(!gravar()) //gravação ok, led learn apaga 
+*
+0176:  MOVF   21,F
+0177:  BTFSS  03.2
+0178:  GOTO   182
+....................       {  
+....................         LEDG=0;  
+0179:  BCF    24.0
+....................         output_high(pin_a4); 
+017A:  BSF    05.4
+....................         delay_ms(300); 
+017B:  MOVLW  02
+017C:  MOVWF  32
+017D:  MOVLW  96
+017E:  MOVWF  33
+017F:  CALL   00A
+0180:  DECFSZ 32,F
+0181:  GOTO   17D
+....................       } 
+....................    } 
+....................   } 
+....................  
+.................... }  
+....................   
+.................... //============================================================================== 
+.................... //         Rotina de recepção do tx comparando 2 recepções consecutivas 
+.................... //============================================================================== 
+....................  
+....................  
+.................... void recebe_tx() 
+.................... {  
+....................    static int1 fr; 
+....................     if(get_htp()) 
+*
+0070:  MOVF   21,F
+0071:  BTFSC  03.2
+0072:  GOTO   186
+....................      { 
+....................       if(!fr) //salva a primeira recepção 
+0073:  BTFSC  24.1
+0074:  GOTO   07F
+....................       { 
+....................         bufferx=buffer;  
+0075:  MOVF   28,W
+0076:  MOVWF  2C
+0077:  MOVF   27,W
+0078:  MOVWF  2B
+0079:  MOVF   26,W
+007A:  MOVWF  2A
+007B:  MOVF   25,W
+007C:  MOVWF  29
+....................         fr=1; 
+007D:  BSF    24.1
+....................       } 
+007E:  GOTO   186
+....................       else 
+....................       { 
+....................          fr=0; 
+007F:  BCF    24.1
+....................          if(bufferx==buffer) 
+0080:  MOVF   25,W
+0081:  SUBWF  29,W
+0082:  BTFSS  03.2
+0083:  GOTO   186
+0084:  MOVF   26,W
+0085:  SUBWF  2A,W
+0086:  BTFSS  03.2
+0087:  GOTO   186
+0088:  MOVF   27,W
+0089:  SUBWF  2B,W
+008A:  BTFSS  03.2
+008B:  GOTO   186
+008C:  MOVF   28,W
+008D:  SUBWF  2C,W
+008E:  BTFSS  03.2
+008F:  GOTO   186
+....................             {  
+....................                action();  
+....................                bufferx=0;  
+*
+0182:  CLRF   2C
+0183:  CLRF   2B
+0184:  CLRF   2A
+0185:  CLRF   29
+....................             }//compara a primeira com a segunda 
+....................       } 
+....................     } 
+0186:  GOTO   1CE (RETURN)
+.................... } 
+....................  
+....................  
+....................  
+....................  
+....................  
+.................... //============================================================================== 
+.................... //         IMER0 CONTAGEM DO BOTÃO PROG 
+.................... //============================================================================== 
+....................  
+....................  
+.................... //============================================================================== 
+.................... //          Rotina principal 
+.................... //============================================================================== 
+....................  
+....................  
+.................... void main() 
+0187:  MOVF   03,W
+0188:  ANDLW  1F
+0189:  MOVWF  03
+018A:  MOVLW  3F
+018B:  MOVWF  20
+018C:  MOVLW  21
+018D:  MOVWF  04
+018E:  BCF    03.7
+018F:  CLRF   00
+0190:  INCF   04,F
+0191:  DECFSZ 20,F
+0192:  GOTO   18F
+0193:  CLRF   20
+0194:  CLRF   28
+0195:  CLRF   27
+0196:  CLRF   26
+0197:  CLRF   25
+0198:  CLRF   2C
+0199:  CLRF   2B
+019A:  CLRF   2A
+019B:  CLRF   29
+019C:  CLRF   2E
+019D:  CLRF   2D
+019E:  CLRF   2F
+019F:  BCF    1F.6
+01A0:  BSF    03.5
+01A1:  BCF    1F.0
+01A2:  BCF    1F.1
+01A3:  BCF    1F.2
+01A4:  BCF    1F.3
+01A5:  MOVLW  07
+01A6:  BCF    03.5
+01A7:  MOVWF  19
+.................... { 
+....................  set_tris_a(0b001001); 
+01A8:  MOVLW  09
+01A9:  BSF    03.5
+01AA:  MOVWF  05
+....................  output_low(liga); //desliga saida 
+01AB:  BCF    03.5
+01AC:  BCF    05.5
+....................  output_high(pin_a4); //desliga led 
+01AD:  BSF    05.4
+....................  
+....................    setup_adc_ports(NO_ANALOGS|VSS_VDD); 
+01AE:  BCF    1F.6
+01AF:  BSF    03.5
+01B0:  BCF    1F.0
+01B1:  BCF    1F.1
+01B2:  BCF    1F.2
+01B3:  BCF    1F.3
+....................    setup_adc(ADC_CLOCK_DIV_2); 
+01B4:  BCF    1F.4
+01B5:  BCF    1F.5
+01B6:  BCF    1F.6
+01B7:  BCF    03.5
+01B8:  BCF    1F.7
+01B9:  BSF    1F.0
+....................    setup_timer_0(RTCC_INTERNAL|RTCC_DIV_256); 
+01BA:  BSF    03.5
+01BB:  MOVF   01,W
+01BC:  ANDLW  C0
+01BD:  IORLW  07
+01BE:  MOVWF  01
+....................    setup_timer_1(T1_INTERNAL|T1_DIV_BY_8); 
+01BF:  MOVLW  35
+01C0:  BCF    03.5
+01C1:  MOVWF  10
+....................   // setup_ccp1(CCP_OFF); 
+....................   // setup_comparator(NC_NC); 
+....................    setup_vref(FALSE); 
+01C2:  BSF    03.5
+01C3:  CLRF   19
+....................    
+....................    LEDG=0;    
+01C4:  BCF    03.5
+01C5:  BCF    24.0
+....................  
+....................  
+....................  
+....................  
+....................  
+....................  
+....................  
+....................  
+.................... //============================================================================== 
+.................... //           Loop principal 
+.................... //============================================================================== 
+....................  
+....................    while(true) 
+....................    {     
+....................     if(input(botao)) 
+01C6:  BTFSS  05.0
+01C7:  GOTO   1CD
+....................       { 
+....................          LEDG = 1; 
+01C8:  BSF    24.0
+....................          output_low(pin_a4); 
+01C9:  BCF    05.4
+....................          delay_ms(200); 
+01CA:  MOVLW  C8
+01CB:  MOVWF  33
+01CC:  CALL   00A
+....................       } 
+....................      recebe_tx();//verifica se houve uma recepção de tx       
+01CD:  GOTO   01E
+01CE:  GOTO   1C6
+....................    } 
+.................... } 
+01CF:  SLEEP
+
+Configuration Fuses:
+   Word  1: 1104   INTRC_IO NOWDT PUT NOMCLR NOBROWNOUT PROTECT NOCPD
+
+ROM data:
+0003FF: 3460 
