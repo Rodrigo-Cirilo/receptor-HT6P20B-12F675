@@ -35,23 +35,23 @@ ROM Allocation:
 00001E  recebe_tx
 000090  procura
 000090  action
-0000E5  end_gravar
-0000E5  gravar
-000187  @cinit1
-000187  MAIN
-0001A8  @cinit2
+0000E8  end_gravar
+0000E8  gravar
+00018A  @cinit1
+00018A  MAIN
+0001AB  @cinit2
 
 Project Directory:
     C:\Users\Rodrigo\Documents\receptor-12f675\receptor-HT6P20B-12F675\
 
 Project Files:
-    receptor-12f675-ht6p20b.c                               [19-dez-23 20:50  CRC=A138447B]
+    receptor-12f675-ht6p20b.c                               [21-dez-23 18:23  CRC=5ECA5882]
     ..\..\..\..\..\Program Files (x86)\PICC\Devices\12F675.h [08-set-15 15:14  CRC=FF0B0280]
 
-Source signature=9F4E497B
-Program memory checksum=B03A
+Source signature=5CE05D82
+Program memory checksum=3D30
 Program memory CRC=0562
-Hex file CRC=546B
+Hex file CRC=5C8B
 
 Units:
     receptor-12f675-ht6p20b (main)

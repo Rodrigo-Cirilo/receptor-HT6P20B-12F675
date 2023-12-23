@@ -1,9 +1,9 @@
-CCS PCM C Compiler, Version 5.049, 5967               19-dez-23 20:50
+CCS PCM C Compiler, Version 5.049, 5967               21-dez-23 18:23
 
                Filename:   C:\Users\Rodrigo\Documents\receptor-12f675\receptor-HT6P20B-12F675\receptor-12f675-ht6p20b.lst
 
-               ROM used:   465 words (45%)
-                           Largest free fragment is 559
+               ROM used:   468 words (46%)
+                           Largest free fragment is 556
                RAM used:   16 (25%) at main() level
                            21 (33%) worst case
                Stack used: 0 locations
@@ -19,7 +19,7 @@ CCS PCM C Compiler, Version 5.049, 5967               19-dez-23 20:50
 0006:  MOVWF  10
 0007:  MOVLW  00
 0008:  MOVWF  0A
-0009:  GOTO   187
+0009:  GOTO   18A
 .................... #include<12F675.h> 
 .................... //////////// Standard Header file for the PIC12F675 device //////////////// 
 .................... /////////////////////////////////////////////////////////////////////////// 
@@ -303,63 +303,63 @@ CCS PCM C Compiler, Version 5.049, 5967               19-dez-23 20:50
 ....................  
 ....................    for(a=0;a<126;a+=3){ 
 *
-00E5:  CLRF   33
-00E6:  MOVF   33,W
-00E7:  SUBLW  7D
-00E8:  BTFSS  03.0
-00E9:  GOTO   116
+00E8:  CLRF   33
+00E9:  MOVF   33,W
+00EA:  SUBLW  7D
+00EB:  BTFSS  03.0
+00EC:  GOTO   119
 ....................     if(read_eeprom(a)!=0xff) continue ;//byte livre? 
-00EA:  MOVF   33,W
-00EB:  BSF    03.5
-00EC:  MOVWF  1B
-00ED:  BCF    1C.7
-00EE:  BSF    1C.0
-00EF:  MOVF   1A,W
-00F0:  SUBLW  FF
-00F1:  BTFSS  03.2
-00F2:  GOTO   112
+00ED:  MOVF   33,W
+00EE:  BSF    03.5
+00EF:  MOVWF  1B
+00F0:  BCF    1C.7
+00F1:  BSF    1C.0
+00F2:  MOVF   1A,W
+00F3:  SUBLW  FF
+00F4:  BTFSS  03.2
+00F5:  GOTO   115
 ....................     if(read_eeprom(a+1)!=0xff) continue ;//byte livre? 
-00F3:  MOVLW  01
-00F4:  BCF    03.5
-00F5:  ADDWF  33,W
-00F6:  MOVWF  34
-00F7:  MOVF   34,W
-00F8:  BSF    03.5
-00F9:  MOVWF  1B
-00FA:  BCF    1C.7
-00FB:  BSF    1C.0
-00FC:  MOVF   1A,W
-00FD:  SUBLW  FF
-00FE:  BTFSS  03.2
-00FF:  GOTO   112
+00F6:  MOVLW  01
+00F7:  BCF    03.5
+00F8:  ADDWF  33,W
+00F9:  MOVWF  34
+00FA:  MOVF   34,W
+00FB:  BSF    03.5
+00FC:  MOVWF  1B
+00FD:  BCF    1C.7
+00FE:  BSF    1C.0
+00FF:  MOVF   1A,W
+0100:  SUBLW  FF
+0101:  BTFSS  03.2
+0102:  GOTO   115
 ....................     if(read_eeprom(a+2)!=0xff) continue ;//byte livre? 
-0100:  MOVLW  02
-0101:  BCF    03.5
-0102:  ADDWF  33,W
-0103:  MOVWF  34
-0104:  MOVF   34,W
-0105:  BSF    03.5
-0106:  MOVWF  1B
-0107:  BCF    1C.7
-0108:  BSF    1C.0
-0109:  MOVF   1A,W
-010A:  SUBLW  FF
-010B:  BTFSS  03.2
-010C:  GOTO   112
+0103:  MOVLW  02
+0104:  BCF    03.5
+0105:  ADDWF  33,W
+0106:  MOVWF  34
+0107:  MOVF   34,W
+0108:  BSF    03.5
+0109:  MOVWF  1B
+010A:  BCF    1C.7
+010B:  BSF    1C.0
+010C:  MOVF   1A,W
+010D:  SUBLW  FF
+010E:  BTFSS  03.2
+010F:  GOTO   115
 ....................     return a;//retorna o endereço inicial de 3 bytes livres 
-010D:  BCF    03.5
-010E:  MOVF   33,W
-010F:  MOVWF  21
-0110:  GOTO   118
-0111:  BSF    03.5
-0112:  MOVLW  03
-0113:  BCF    03.5
-0114:  ADDWF  33,F
-0115:  GOTO   0E6
+0110:  BCF    03.5
+0111:  MOVF   33,W
+0112:  MOVWF  21
+0113:  GOTO   11B
+0114:  BSF    03.5
+0115:  MOVLW  03
+0116:  BCF    03.5
+0117:  ADDWF  33,F
+0118:  GOTO   0E9
 ....................    } 
 ....................    return 0xff;//memória cheia 
-0116:  MOVLW  FF
-0117:  MOVWF  21
+0119:  MOVLW  FF
+011A:  MOVWF  21
 .................... } 
 ....................  
 .................... //============================================================================== 
@@ -372,107 +372,107 @@ CCS PCM C Compiler, Version 5.049, 5967               19-dez-23 20:50
 ....................  
 ....................   int8 adr; 
 ....................   adr=end_gravar(); 
-0118:  MOVF   21,W
-0119:  MOVWF  32
+011B:  MOVF   21,W
+011C:  MOVWF  32
 ....................   if(!(adr+1)){return 0xff;}//não grava pois memória está cheia 
-011A:  MOVLW  01
-011B:  ADDWF  32,W
-011C:  BTFSS  03.2
-011D:  GOTO   122
-011E:  MOVLW  FF
-011F:  MOVWF  21
-0120:  GOTO   176
-0121:  GOTO   176
+011D:  MOVLW  01
+011E:  ADDWF  32,W
+011F:  BTFSS  03.2
+0120:  GOTO   125
+0121:  MOVLW  FF
+0122:  MOVWF  21
+0123:  GOTO   179
+0124:  GOTO   179
 ....................   else{ 
 ....................   write_eeprom(adr,make8(buffer,2));//grava o primeiro byte 
-0122:  MOVF   27,W
-0123:  MOVWF  33
-0124:  MOVF   0B,W
-0125:  MOVWF  20
-0126:  BCF    0B.7
-0127:  MOVF   32,W
-0128:  BSF    03.5
-0129:  MOVWF  1B
-012A:  BCF    03.5
-012B:  MOVF   27,W
-012C:  BSF    03.5
-012D:  MOVWF  1A
-012E:  BCF    1C.7
-012F:  BSF    1C.2
-0130:  MOVLW  55
-0131:  MOVWF  1D
-0132:  MOVLW  AA
-0133:  MOVWF  1D
-0134:  BSF    1C.1
-0135:  BTFSC  1C.1
-0136:  GOTO   135
-0137:  BCF    1C.2
-0138:  BCF    03.5
-0139:  MOVF   20,W
-013A:  IORWF  0B,F
+0125:  MOVF   27,W
+0126:  MOVWF  33
+0127:  MOVF   0B,W
+0128:  MOVWF  20
+0129:  BCF    0B.7
+012A:  MOVF   32,W
+012B:  BSF    03.5
+012C:  MOVWF  1B
+012D:  BCF    03.5
+012E:  MOVF   27,W
+012F:  BSF    03.5
+0130:  MOVWF  1A
+0131:  BCF    1C.7
+0132:  BSF    1C.2
+0133:  MOVLW  55
+0134:  MOVWF  1D
+0135:  MOVLW  AA
+0136:  MOVWF  1D
+0137:  BSF    1C.1
+0138:  BTFSC  1C.1
+0139:  GOTO   138
+013A:  BCF    1C.2
+013B:  BCF    03.5
+013C:  MOVF   20,W
+013D:  IORWF  0B,F
 ....................   write_eeprom(adr+1,make8(buffer,1));//grava o segundo byte 
-013B:  MOVLW  01
-013C:  ADDWF  32,W
-013D:  MOVWF  33
-013E:  MOVF   26,W
-013F:  MOVWF  34
-0140:  MOVF   0B,W
-0141:  MOVWF  20
-0142:  BCF    0B.7
-0143:  MOVF   33,W
-0144:  BSF    03.5
-0145:  MOVWF  1B
-0146:  BCF    03.5
-0147:  MOVF   26,W
-0148:  BSF    03.5
-0149:  MOVWF  1A
-014A:  BCF    1C.7
-014B:  BSF    1C.2
-014C:  MOVLW  55
-014D:  MOVWF  1D
-014E:  MOVLW  AA
-014F:  MOVWF  1D
-0150:  BSF    1C.1
-0151:  BTFSC  1C.1
-0152:  GOTO   151
-0153:  BCF    1C.2
-0154:  BCF    03.5
-0155:  MOVF   20,W
-0156:  IORWF  0B,F
+013E:  MOVLW  01
+013F:  ADDWF  32,W
+0140:  MOVWF  33
+0141:  MOVF   26,W
+0142:  MOVWF  34
+0143:  MOVF   0B,W
+0144:  MOVWF  20
+0145:  BCF    0B.7
+0146:  MOVF   33,W
+0147:  BSF    03.5
+0148:  MOVWF  1B
+0149:  BCF    03.5
+014A:  MOVF   26,W
+014B:  BSF    03.5
+014C:  MOVWF  1A
+014D:  BCF    1C.7
+014E:  BSF    1C.2
+014F:  MOVLW  55
+0150:  MOVWF  1D
+0151:  MOVLW  AA
+0152:  MOVWF  1D
+0153:  BSF    1C.1
+0154:  BTFSC  1C.1
+0155:  GOTO   154
+0156:  BCF    1C.2
+0157:  BCF    03.5
+0158:  MOVF   20,W
+0159:  IORWF  0B,F
 ....................   write_eeprom(adr+2,make8(buffer,0));//grava o terceiro byte 
-0157:  MOVLW  02
-0158:  ADDWF  32,W
-0159:  MOVWF  33
-015A:  MOVF   25,W
-015B:  MOVWF  34
-015C:  MOVF   0B,W
-015D:  MOVWF  20
-015E:  BCF    0B.7
-015F:  MOVF   33,W
-0160:  BSF    03.5
-0161:  MOVWF  1B
-0162:  BCF    03.5
-0163:  MOVF   25,W
-0164:  BSF    03.5
-0165:  MOVWF  1A
-0166:  BCF    1C.7
-0167:  BSF    1C.2
-0168:  MOVLW  55
-0169:  MOVWF  1D
-016A:  MOVLW  AA
-016B:  MOVWF  1D
-016C:  BSF    1C.1
-016D:  BTFSC  1C.1
-016E:  GOTO   16D
-016F:  BCF    1C.2
-0170:  BCF    03.5
-0171:  MOVF   20,W
-0172:  IORWF  0B,F
+015A:  MOVLW  02
+015B:  ADDWF  32,W
+015C:  MOVWF  33
+015D:  MOVF   25,W
+015E:  MOVWF  34
+015F:  MOVF   0B,W
+0160:  MOVWF  20
+0161:  BCF    0B.7
+0162:  MOVF   33,W
+0163:  BSF    03.5
+0164:  MOVWF  1B
+0165:  BCF    03.5
+0166:  MOVF   25,W
+0167:  BSF    03.5
+0168:  MOVWF  1A
+0169:  BCF    1C.7
+016A:  BSF    1C.2
+016B:  MOVLW  55
+016C:  MOVWF  1D
+016D:  MOVLW  AA
+016E:  MOVWF  1D
+016F:  BSF    1C.1
+0170:  BTFSC  1C.1
+0171:  GOTO   170
+0172:  BCF    1C.2
+0173:  BCF    03.5
+0174:  MOVF   20,W
+0175:  IORWF  0B,F
 ....................   disable_interrupts(INT_TIMER0); 
-0173:  BCF    0B.5
+0176:  BCF    0B.5
 ....................   return 0x00;//ok 
-0174:  MOVLW  00
-0175:  MOVWF  21
+0177:  MOVLW  00
+0178:  MOVWF  21
 ....................   } 
 ....................    
 .................... } 
@@ -488,7 +488,7 @@ CCS PCM C Compiler, Version 5.049, 5967               19-dez-23 20:50
 *
 00C7:  MOVF   21,F
 00C8:  BTFSC  03.2
-00C9:  GOTO   0E3
+00C9:  GOTO   0E6
 ....................   { 
 ....................    int8 aux; 
 ....................    
@@ -504,58 +504,63 @@ CCS PCM C Compiler, Version 5.049, 5967               19-dez-23 20:50
 00D0:  BTFSC  30.7
 00D1:  GOTO   0D4
 00D2:  BTFSS  30.6
-00D3:  GOTO   0E1
+00D3:  GOTO   0E4
 ....................     { 
 ....................            
-....................         for(int i = 0; i < 30; i++){ 
+....................         for(int i = 0; i < 50; i++){ 
 00D4:  CLRF   31
 00D5:  MOVF   31,W
-00D6:  SUBLW  1D
+00D6:  SUBLW  31
 00D7:  BTFSS  03.0
-00D8:  GOTO   0E0
-....................           output_toggle(liga);    
+00D8:  GOTO   0E2
+....................           output_toggle(liga);  
 00D9:  MOVLW  20
 00DA:  XORWF  05,F
-....................             delay_ms(50); 
-00DB:  MOVLW  32
-00DC:  MOVWF  33
-00DD:  CALL   00A
-00DE:  INCF   31,F
-00DF:  GOTO   0D5
+....................             output_toggle(pin_a4);  
+00DB:  MOVLW  10
+00DC:  XORWF  05,F
+....................             delay_ms(30); 
+00DD:  MOVLW  1E
+00DE:  MOVWF  33
+00DF:  CALL   00A
+00E0:  INCF   31,F
+00E1:  GOTO   0D5
 ....................         } 
 ....................          output_low(liga);    
-00E0:  BCF    05.5
+00E2:  BCF    05.5
+....................           output_high(pin_a4); 
+00E3:  BSF    05.4
 ....................     } 
 ....................    
 ....................     LEDG=0; 
-00E1:  BCF    24.0
+00E4:  BCF    24.0
 ....................  } 
-00E2:  GOTO   182
+00E5:  GOTO   185
 ....................     
 ....................   else{ 
 ....................    
 ....................    if(LEDG) 
-00E3:  BTFSS  24.0
-00E4:  GOTO   182
+00E6:  BTFSS  24.0
+00E7:  GOTO   185
 ....................    { 
 ....................       if(!gravar()) //gravação ok, led learn apaga 
 *
-0176:  MOVF   21,F
-0177:  BTFSS  03.2
-0178:  GOTO   182
+0179:  MOVF   21,F
+017A:  BTFSS  03.2
+017B:  GOTO   185
 ....................       {  
 ....................         LEDG=0;  
-0179:  BCF    24.0
+017C:  BCF    24.0
 ....................         output_high(pin_a4); 
-017A:  BSF    05.4
+017D:  BSF    05.4
 ....................         delay_ms(300); 
-017B:  MOVLW  02
-017C:  MOVWF  32
-017D:  MOVLW  96
-017E:  MOVWF  33
-017F:  CALL   00A
-0180:  DECFSZ 32,F
-0181:  GOTO   17D
+017E:  MOVLW  02
+017F:  MOVWF  32
+0180:  MOVLW  96
+0181:  MOVWF  33
+0182:  CALL   00A
+0183:  DECFSZ 32,F
+0184:  GOTO   180
 ....................       } 
 ....................    } 
 ....................   } 
@@ -574,7 +579,7 @@ CCS PCM C Compiler, Version 5.049, 5967               19-dez-23 20:50
 *
 0070:  MOVF   21,F
 0071:  BTFSC  03.2
-0072:  GOTO   186
+0072:  GOTO   189
 ....................      { 
 ....................       if(!fr) //salva a primeira recepção 
 0073:  BTFSC  24.1
@@ -592,7 +597,7 @@ CCS PCM C Compiler, Version 5.049, 5967               19-dez-23 20:50
 ....................         fr=1; 
 007D:  BSF    24.1
 ....................       } 
-007E:  GOTO   186
+007E:  GOTO   189
 ....................       else 
 ....................       { 
 ....................          fr=0; 
@@ -601,31 +606,31 @@ CCS PCM C Compiler, Version 5.049, 5967               19-dez-23 20:50
 0080:  MOVF   25,W
 0081:  SUBWF  29,W
 0082:  BTFSS  03.2
-0083:  GOTO   186
+0083:  GOTO   189
 0084:  MOVF   26,W
 0085:  SUBWF  2A,W
 0086:  BTFSS  03.2
-0087:  GOTO   186
+0087:  GOTO   189
 0088:  MOVF   27,W
 0089:  SUBWF  2B,W
 008A:  BTFSS  03.2
-008B:  GOTO   186
+008B:  GOTO   189
 008C:  MOVF   28,W
 008D:  SUBWF  2C,W
 008E:  BTFSS  03.2
-008F:  GOTO   186
+008F:  GOTO   189
 ....................             {  
 ....................                action();  
 ....................                bufferx=0;  
 *
-0182:  CLRF   2C
-0183:  CLRF   2B
-0184:  CLRF   2A
-0185:  CLRF   29
+0185:  CLRF   2C
+0186:  CLRF   2B
+0187:  CLRF   2A
+0188:  CLRF   29
 ....................             }//compara a primeira com a segunda 
 ....................       } 
 ....................     } 
-0186:  GOTO   1CE (RETURN)
+0189:  GOTO   1D1 (RETURN)
 .................... } 
 ....................  
 ....................  
@@ -643,83 +648,83 @@ CCS PCM C Compiler, Version 5.049, 5967               19-dez-23 20:50
 ....................  
 ....................  
 .................... void main() 
-0187:  MOVF   03,W
-0188:  ANDLW  1F
-0189:  MOVWF  03
-018A:  MOVLW  3F
-018B:  MOVWF  20
-018C:  MOVLW  21
-018D:  MOVWF  04
-018E:  BCF    03.7
-018F:  CLRF   00
-0190:  INCF   04,F
-0191:  DECFSZ 20,F
-0192:  GOTO   18F
-0193:  CLRF   20
-0194:  CLRF   28
-0195:  CLRF   27
-0196:  CLRF   26
-0197:  CLRF   25
-0198:  CLRF   2C
-0199:  CLRF   2B
-019A:  CLRF   2A
-019B:  CLRF   29
-019C:  CLRF   2E
-019D:  CLRF   2D
-019E:  CLRF   2F
-019F:  BCF    1F.6
-01A0:  BSF    03.5
-01A1:  BCF    1F.0
-01A2:  BCF    1F.1
-01A3:  BCF    1F.2
-01A4:  BCF    1F.3
-01A5:  MOVLW  07
-01A6:  BCF    03.5
-01A7:  MOVWF  19
+018A:  MOVF   03,W
+018B:  ANDLW  1F
+018C:  MOVWF  03
+018D:  MOVLW  3F
+018E:  MOVWF  20
+018F:  MOVLW  21
+0190:  MOVWF  04
+0191:  BCF    03.7
+0192:  CLRF   00
+0193:  INCF   04,F
+0194:  DECFSZ 20,F
+0195:  GOTO   192
+0196:  CLRF   20
+0197:  CLRF   28
+0198:  CLRF   27
+0199:  CLRF   26
+019A:  CLRF   25
+019B:  CLRF   2C
+019C:  CLRF   2B
+019D:  CLRF   2A
+019E:  CLRF   29
+019F:  CLRF   2E
+01A0:  CLRF   2D
+01A1:  CLRF   2F
+01A2:  BCF    1F.6
+01A3:  BSF    03.5
+01A4:  BCF    1F.0
+01A5:  BCF    1F.1
+01A6:  BCF    1F.2
+01A7:  BCF    1F.3
+01A8:  MOVLW  07
+01A9:  BCF    03.5
+01AA:  MOVWF  19
 .................... { 
 ....................  set_tris_a(0b001001); 
-01A8:  MOVLW  09
-01A9:  BSF    03.5
-01AA:  MOVWF  05
+01AB:  MOVLW  09
+01AC:  BSF    03.5
+01AD:  MOVWF  05
 ....................  output_low(liga); //desliga saida 
-01AB:  BCF    03.5
-01AC:  BCF    05.5
+01AE:  BCF    03.5
+01AF:  BCF    05.5
 ....................  output_high(pin_a4); //desliga led 
-01AD:  BSF    05.4
+01B0:  BSF    05.4
 ....................  
 ....................    setup_adc_ports(NO_ANALOGS|VSS_VDD); 
-01AE:  BCF    1F.6
-01AF:  BSF    03.5
-01B0:  BCF    1F.0
-01B1:  BCF    1F.1
-01B2:  BCF    1F.2
-01B3:  BCF    1F.3
+01B1:  BCF    1F.6
+01B2:  BSF    03.5
+01B3:  BCF    1F.0
+01B4:  BCF    1F.1
+01B5:  BCF    1F.2
+01B6:  BCF    1F.3
 ....................    setup_adc(ADC_CLOCK_DIV_2); 
-01B4:  BCF    1F.4
-01B5:  BCF    1F.5
-01B6:  BCF    1F.6
-01B7:  BCF    03.5
-01B8:  BCF    1F.7
-01B9:  BSF    1F.0
+01B7:  BCF    1F.4
+01B8:  BCF    1F.5
+01B9:  BCF    1F.6
+01BA:  BCF    03.5
+01BB:  BCF    1F.7
+01BC:  BSF    1F.0
 ....................    setup_timer_0(RTCC_INTERNAL|RTCC_DIV_256); 
-01BA:  BSF    03.5
-01BB:  MOVF   01,W
-01BC:  ANDLW  C0
-01BD:  IORLW  07
-01BE:  MOVWF  01
+01BD:  BSF    03.5
+01BE:  MOVF   01,W
+01BF:  ANDLW  C0
+01C0:  IORLW  07
+01C1:  MOVWF  01
 ....................    setup_timer_1(T1_INTERNAL|T1_DIV_BY_8); 
-01BF:  MOVLW  35
-01C0:  BCF    03.5
-01C1:  MOVWF  10
+01C2:  MOVLW  35
+01C3:  BCF    03.5
+01C4:  MOVWF  10
 ....................   // setup_ccp1(CCP_OFF); 
 ....................   // setup_comparator(NC_NC); 
 ....................    setup_vref(FALSE); 
-01C2:  BSF    03.5
-01C3:  CLRF   19
+01C5:  BSF    03.5
+01C6:  CLRF   19
 ....................    
 ....................    LEDG=0;    
-01C4:  BCF    03.5
-01C5:  BCF    24.0
+01C7:  BCF    03.5
+01C8:  BCF    24.0
 ....................  
 ....................  
 ....................  
@@ -735,24 +740,24 @@ CCS PCM C Compiler, Version 5.049, 5967               19-dez-23 20:50
 ....................    while(true) 
 ....................    {     
 ....................     if(input(botao)) 
-01C6:  BTFSS  05.0
-01C7:  GOTO   1CD
+01C9:  BTFSS  05.0
+01CA:  GOTO   1D0
 ....................       { 
 ....................          LEDG = 1; 
-01C8:  BSF    24.0
+01CB:  BSF    24.0
 ....................          output_low(pin_a4); 
-01C9:  BCF    05.4
+01CC:  BCF    05.4
 ....................          delay_ms(200); 
-01CA:  MOVLW  C8
-01CB:  MOVWF  33
-01CC:  CALL   00A
+01CD:  MOVLW  C8
+01CE:  MOVWF  33
+01CF:  CALL   00A
 ....................       } 
 ....................      recebe_tx();//verifica se houve uma recepção de tx       
-01CD:  GOTO   01E
-01CE:  GOTO   1C6
+01D0:  GOTO   01E
+01D1:  GOTO   1C9
 ....................    } 
 .................... } 
-01CF:  SLEEP
+01D2:  SLEEP
 
 Configuration Fuses:
    Word  1: 1104   INTRC_IO NOWDT PUT NOMCLR NOBROWNOUT PROTECT NOCPD
